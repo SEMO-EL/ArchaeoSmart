@@ -204,27 +204,35 @@ maximumAge:0
 
 function startDictation(){
 
-if(!('webkitSpeechRecognition' in window)){
+const SpeechRecognition =
+window.SpeechRecognition || window.webkitSpeechRecognition;
 
-alert("Voice recognition not supported on this phone");
-
+if(!SpeechRecognition){
+alert("Speech recognition not supported on this device.");
 return;
-
 }
 
-const recognition = new webkitSpeechRecognition();
+const recognition = new SpeechRecognition();
+
+recognition.lang = "en-US";
+recognition.continuous = false;
+recognition.interimResults = false;
 
 recognition.onresult = function(event){
 
-document.getElementById("voiceText").value =
-event.results[0][0].transcript;
+let text = event.results[0][0].transcript;
 
+document.getElementById("voiceText").value = text;
+
+};
+
+recognition.onerror = function(event){
+alert("Voice recognition error: " + event.error);
 };
 
 recognition.start();
 
 }
-
 document.getElementById("photo").onchange=function(e){
 
 let reader=new FileReader();
