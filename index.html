@@ -1,182 +1,198 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>ArchaeoSmart</title>
-
-<link rel="stylesheet" href="./style.css">
-
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
-<script src="https://unpkg.com/html5-qrcode"></script>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-
-</head>
-
-<body>
-
-<div class="app">
-
-<header>
-
-<button class="homeBtn" onclick="showHome()">🏠</button>
-
-<h1>ArchaeoSmart</h1>
-
-</header>
-
-
-<!-- HOME -->
-
-<div id="homeScreen">
-
-<button class="mainButton" onclick="showArtifact()">New Artifact</button>
-
-<button class="mainButton" onclick="showDatabase()">Artifact Database</button>
-
-<button class="mainButton" onclick="startScanner()">Scan QR Code</button>
-
-<button class="mainButton" onclick="showMap()">Artifact Map</button>
-
-</div>
-
-
-<!-- CREATE ARTIFACT -->
-
-<div id="artifactScreen" class="hidden">
-
-<h2>Artifact Record</h2>
-
-<input id="site" placeholder="Site name">
-
-<select id="type">
-<option>Ceramic</option>
-<option>Bone</option>
-<option>Metal</option>
-<option>Stone</option>
-</select>
-
-<div class="grid">
-
-<div class="card">
-<h3>QR Code</h3>
-<div id="qrcode"></div>
-</div>
-
-<div class="card">
-<h3>GPS</h3>
-<p id="gps">Not recorded</p>
-<button onclick="getLocation()">Get GPS</button>
-</div>
-
-<div class="card">
-<h3>Date</h3>
-<p id="date"></p>
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="card">
-<h3>Voice Note</h3>
-<button onclick="startDictation()">🎤 Record</button>
-<textarea id="voiceText"></textarea>
-</div>
-
-<div class="card">
-<h3>Photo</h3>
-<input type="file" accept="image/*" id="photo">
-<img id="preview">
-</div>
-
-</div>
-
-
-<div class="grid">
-
-<div class="card">
-<h3>Depth</h3>
-<input id="depth" placeholder="Depth cm">
-</div>
-
-<div class="card">
-<h3>Drawing</h3>
-<canvas id="canvas"></canvas>
-<button onclick="clearCanvas()">Clear</button>
-</div>
-
-</div>
-
-<div class="card">
-<h3>Notes</h3>
-<textarea id="notes"></textarea>
-</div>
-
-<button class="save" onclick="saveArtifact()">Save Artifact</button>
-
-</div>
-
-
-<!-- DATABASE -->
-
-<div id="databaseScreen" class="hidden">
-
-<h2>Artifact Database</h2>
-
-<input id="searchID" placeholder="Search by Artifact ID">
-
-<button onclick="searchArtifact()">Search</button>
-
-<button onclick="exportCSV()">Export CSV</button>
-
-<div id="artifactList"></div>
-
-</div>
-
-
-<!-- DETAIL -->
-
-<div id="detailScreen" class="hidden">
-
-<h2>Artifact Details</h2>
-
-<div id="artifactDetail"></div>
-
-</div>
-
-
-<!-- MAP -->
-
-<div id="mapScreen" class="hidden">
-
-<h2>Artifact Map</h2>
-
-<div id="map"></div>
-
-</div>
-
-
-<!-- QR SCANNER -->
-
-<div id="scannerScreen" class="hidden">
-
-<h2>Scan Artifact</h2>
-
-<div id="reader"></div>
-
-</div>
-
-
-</div>
-
-<script src="./app.js"></script>
-
-</body>
-
-</html>
+  <!DOCTYPE html>
+  <html>
+  
+  <head>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <title>ArchaeoSmart</title>
+  
+  <link rel="stylesheet" href="./style.css">
+  
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  
+  </head>
+  
+  <body>
+  
+  <div class="app">
+  
+  <header>
+  
+  <button class="homeBtn" onclick="showHome()">🏠</button>
+  
+  <h1>ArchaeoSmart</h1>
+  
+  </header>
+  
+  
+  <!-- HOME -->
+  
+  <div id="homeScreen">
+  
+  <button class="mainButton" onclick="showArtifact()">New Artifact</button>
+  
+  <button class="mainButton" onclick="showDatabase()">Artifact Database</button>
+  
+  <button class="mainButton" onclick="startScanner()">Scan QR Code</button>
+  
+  <button class="mainButton" onclick="showMap()">Artifact Map</button>
+  
+  </div>
+  
+  
+  <!-- CREATE ARTIFACT -->
+  
+  <div id="artifactScreen" class="hidden">
+  
+  <h2>Artifact Record</h2>
+  
+  <input id="site" placeholder="Site name">
+  
+  <select id="type">
+  <option>Ceramic</option>
+  <option>Bone</option>
+  <option>Metal</option>
+  <option>Stone</option>
+  </select>
+  
+  <div class="grid">
+  
+  <div class="card">
+  <h3>QR Code</h3>
+  <div id="qrcode"></div>
+  </div>
+  
+  <div class="card">
+  <h3>GPS</h3>
+  <p id="gps">Not recorded</p>
+  <button onclick="getLocation()">Get GPS</button>
+  </div>
+  
+  <div class="card">
+  <h3>Date</h3>
+  <p id="date"></p>
+  </div>
+  
+  </div>
+  
+  
+  <div class="grid">
+  
+  <div class="card">
+  <h3>Voice Note</h3>
+  <button onclick="startDictation()">🎤 Record</button>
+  <textarea id="voiceText"></textarea>
+  </div>
+  
+  <div class="card">
+  <h3>Photo</h3>
+  <input type="file" accept="image/*" id="photo">
+  <img id="preview">
+  </div>
+  
+  </div>
+  
+  
+  <div class="grid">
+  
+  <div class="card">
+  <h3>Depth</h3>
+  <input id="depth" placeholder="Depth cm">
+  </div>
+  
+  <div class="card">
+  <h3>Drawing</h3>
+  <canvas id="canvas"></canvas>
+  <button onclick="clearCanvas()">Clear</button>
+  </div>
+  
+  <button onclick="openCanvasFullscreen()">Fullscreen</button>
+  
+  </div>
+  
+  <div class="card">
+  <h3>Notes</h3>
+  <textarea id="notes"></textarea>
+  </div>
+  
+  <button class="save" onclick="saveArtifact()">Save Artifact</button>
+  
+  </div>
+  
+  
+  <!-- DATABASE -->
+  
+  <div id="databaseScreen" class="hidden">
+  
+  <h2>Artifact Database</h2>
+  
+  <input id="searchID" placeholder="Search by Artifact ID">
+  
+  <button onclick="searchArtifact()">Search</button>
+  
+  <button onclick="exportCSV()">Export CSV</button>
+  
+  <div id="artifactList"></div>
+  
+  </div>
+  
+  
+  <!-- DETAIL -->
+  
+  <div id="detailScreen" class="hidden">
+  
+  <h2>Artifact Details</h2>
+  
+  <div id="artifactDetail"></div>
+  
+  </div>
+  
+  
+  <!-- MAP -->
+  
+  <div id="mapScreen" class="hidden">
+  
+  <h2>Artifact Map</h2>
+  
+  <div id="map"></div>
+  
+  </div>
+  
+  
+  <!-- QR SCANNER -->
+  
+  <div id="scannerScreen" class="hidden">
+  
+  <h2>Scan Artifact</h2>
+  
+  <div id="reader"></div>
+  
+  </div>
+  
+  <div id="canvasFullscreen" class="hidden">
+  
+  <div class="canvasFullContainer">
+  
+  <button onclick="closeCanvasFullscreen()">Close</button>
+  
+  <canvas id="canvasFull"></canvas>
+  
+  <button onclick="clearCanvasFull()">Clear</button>
+  
+  </div>
+  
+  </div>
+  
+  
+  </div>
+  
+  <script src="./app.js"></script>
+  
+  </body>
+  
+  </html>
