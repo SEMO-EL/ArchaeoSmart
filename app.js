@@ -6,6 +6,29 @@ function hideAll(){
 document.querySelectorAll("#homeScreen,#artifactScreen,#databaseScreen,#detailScreen,#mapScreen,#scannerScreen")
 .forEach(e=>e.classList.add("hidden"));
 }
+let fullCanvas = document.getElementById("canvasFull");
+let fullCtx = fullCanvas.getContext("2d");
+
+function openCanvasFullscreen(){
+
+document.getElementById("canvasFullscreen").classList.remove("hidden");
+
+fullCanvas.width = window.innerWidth;
+fullCanvas.height = window.innerHeight - 80;
+
+}
+
+function closeCanvasFullscreen(){
+
+document.getElementById("canvasFullscreen").classList.add("hidden");
+
+}
+
+function clearCanvasFull(){
+
+fullCtx.clearRect(0,0,fullCanvas.width,fullCanvas.height);
+
+}
 
 function showHome(){
 hideAll();
