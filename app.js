@@ -190,35 +190,57 @@ link.click();
 
 }
 
-function getLocation(){
+function getLocation() {
 
-if(!navigator.geolocation){
-alert("GPS not supported on this device");
+const gpsField = document.getElementById("gps");
+
+gpsField.innerText = "Getting GPS...";
+
+if (!navigator.geolocation) {
+gpsField.innerText = "GPS not supported";
 return;
 }
 
 navigator.geolocation.getCurrentPosition(
 
-function(position){
+function (position) {
 
-let lat = position.coords.latitude;
-let lng = position.coords.longitude;
+const lat = position.coords.latitude;
+const lng = position.coords.longitude;
 
-document.getElementById("gps").innerText =
-lat + "," + lng;
+gpsField.innerText = lat + "," + lng;
 
 },
 
-function(error){
+function (error) {
 
-alert("Location permission required");
+console.log("GPS ERROR:", error);
+
+switch(error.code){
+
+case error.PERMISSION_DENIED:
+gpsField.innerText = "Permission denied";
+break;
+
+case error.POSITION_UNAVAILABLE:
+gpsField.innerText = "Location unavailable";
+break;
+
+case error.TIMEOUT:
+gpsField.innerText = "GPS timeout";
+break;
+
+default:
+gpsField.innerText = "Unknown GPS error";
+
+}
 
 },
 
 {
-enableHighAccuracy:true,
-timeout:10000,
-maximumAge:0
+enableHighAccuracy: true,
+timeout: 20000,
+maximumAge: 0
 }
 
 );
