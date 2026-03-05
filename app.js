@@ -169,23 +169,56 @@ link.click();
 
 function getLocation(){
 
-navigator.geolocation.getCurrentPosition(pos=>{
+if(!navigator.geolocation){
+alert("GPS not supported on this device");
+return;
+}
 
-document.getElementById("gps").innerText=
-pos.coords.latitude+","+pos.coords.longitude;
+navigator.geolocation.getCurrentPosition(
 
-});
+function(position){
+
+let lat = position.coords.latitude;
+let lng = position.coords.longitude;
+
+document.getElementById("gps").innerText =
+lat + "," + lng;
+
+},
+
+function(error){
+
+alert("Location permission required");
+
+},
+
+{
+enableHighAccuracy:true,
+timeout:10000,
+maximumAge:0
+}
+
+);
 
 }
 
 function startDictation(){
 
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+if(!('webkitSpeechRecognition' in window)){
 
-const recognition = new SpeechRecognition();
+alert("Voice recognition not supported on this phone");
 
-recognition.onresult = e => {
-document.getElementById("voiceText").value = e.results[0][0].transcript;
+return;
+
+}
+
+const recognition = new webkitSpeechRecognition();
+
+recognition.onresult = function(event){
+
+document.getElementById("voiceText").value =
+event.results[0][0].transcript;
+
 };
 
 recognition.start();
@@ -226,6 +259,39 @@ ctx.stroke();
 function clearCanvas(){
 ctx.clearRect(0,0,canvas.width,canvas.height);
 }
+canvas.addEventListener("touchstart", function(e){
+
+drawing = true;
+
+let rect = canvas.getBoundingClientRect();
+
+let x = e.touches[0].clientX - rect.left;
+let y = e.touches[0].clientY - rect.top;
+
+ctx.beginPath();
+ctx.moveTo(x,y);
+
+});
+
+canvas.addEventListener("touchmove", function(e){
+
+if(!drawing) return;
+
+let rect = canvas.getBoundingClientRect();
+
+let x = e.touches[0].clientX - rect.left;
+let y = e.touches[0].clientY - rect.top;
+
+ctx.lineTo(x,y);
+ctx.stroke();
+
+});
+
+canvas.addEventListener("touchend", function(){
+
+drawing = false;
+
+});
 
 function startScanner(){
 
