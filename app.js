@@ -258,23 +258,35 @@ hideAll();
 
 document.getElementById("mapScreen").classList.remove("hidden");
 
-let map=L.map('map').setView([31.63,-8],6);
+let map = L.map('map').setView([31.63,-8],6);
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+maxZoom:19
+}).addTo(map);
 
-artifacts.forEach(a=>{
 
-if(a.lat && a.lng){
+console.log("Artifacts loaded:", artifacts);
 
-let marker=L.marker([a.lat,a.lng]).addTo(map);
+
+artifacts.forEach((a,index)=>{
+
+if(!a.lat || !a.lng) return;
+
+let lat = a.lat;
+let lng = a.lng;
+
+// small offset if markers overlap
+lat = lat + (index * 0.00005);
+lng = lng + (index * 0.00005);
+
+let marker = L.marker([lat,lng]).addTo(map);
 
 marker.bindPopup(`
 <b>${a.type}</b><br>
 Site: ${a.site}<br>
+Depth: ${a.depth} cm<br>
 <button onclick="showDetail(${a.id})">Open Artifact</button>
 `);
-
-}
 
 });
 
