@@ -132,6 +132,10 @@ canvas{
 touch-action:none;
 }
 
+canvas{
+touch-action:none;
+}
+
 #map{
 height:400px;
 margin-top:15px;
