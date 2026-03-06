@@ -2,6 +2,7 @@ let artifacts = JSON.parse(localStorage.getItem("artifacts")) || [];
 
 let currentID = null;
 
+
 function hideAll(){
 document.querySelectorAll("#homeScreen,#artifactScreen,#databaseScreen,#detailScreen,#mapScreen,#scannerScreen")
 .forEach(e=>e.classList.add("hidden"));
