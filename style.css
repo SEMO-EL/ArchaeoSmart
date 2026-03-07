@@ -3,7 +3,6 @@ font-family:Arial;
 background:#efe4cc;
 }
 
-
 .app{
 max-width:480px;
 margin:auto;
@@ -70,10 +69,11 @@ border-radius:8px;
 
 canvas{
 width:100%;
-height:120px;
+height:180px;
 border:1px dashed #aaa;
 border-radius:8px;
 background:white;
+touch-action:none;
 }
 
 .save{
@@ -96,53 +96,92 @@ border-radius:10px;
 cursor:pointer;
 }
 
-#canvasFullscreen{
-
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:white;
-z-index:9999;
-
-}
-
-.canvasFullContainer{
-
-display:flex;
-flex-direction:column;
-height:100%;
-
-}
-
-#canvasFull{
-
-flex:1;
-border:2px solid black;
-
-}
-
 .detailCard{
 background:white;
 padding:15px;
 border-radius:10px;
 margin-top:10px;
 }
-canvas{
-touch-action:none;
+
+#map{
+height:400px;
+margin-top:15px;
+border-radius:10px;
 }
 
-canvas{
-touch-action:none;
+
+
+/* FULLSCREEN CANVAS */
+
+#canvasFullscreen{
+
+position:fixed;
+top:0;
+left:0;
+width:100vw;
+height:100vh;
+background:white;
+z-index:9999;
+
+flex-direction:column;
+
 }
+
+#canvasFull{
+
+width:100vw;
+height:100vh;
+
+touch-action:none;
+
+}
+
+.closeCanvasBtn{
+
+position:absolute;
+
+top:10px;
+right:10px;
+
+padding:10px;
+
+background:#333;
+color:white;
+
+border:none;
+border-radius:6px;
+
+z-index:10;
+
+}
+
+.canvasTools{
+
+position:absolute;
+
+bottom:10px;
+left:10px;
+
+background:white;
+
+padding:10px;
+
+border-radius:10px;
+
+box-shadow:0 0 10px rgba(0,0,0,0.2);
+
+}
+
+
+
+/* VERSION */
 
 #appVersion{
 
 position:fixed;
 
-bottom:8px;
-right:10px;
+bottom:10px;
+right:12px;
 
 font-size:12px;
 
@@ -156,12 +195,4 @@ border-radius:6px;
 
 font-family:monospace;
 
-z-index:9999;
-
-}
-
-#map{
-height:400px;
-margin-top:15px;
-border-radius:10px;
 }
