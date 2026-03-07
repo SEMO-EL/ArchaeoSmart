@@ -634,33 +634,6 @@ Depth: ${a.depth} cm<br>
 
 }
 
-/* floating archaeology background */
-
-const bgContainer = document.getElementById("bgArtifacts");
-
-const artifacts = [
-"🦴",
-"💀",
-"🦷"
-];
-
-for(let i=0;i<15;i++){
-
-let el = document.createElement("div");
-
-el.className = "bgBone";
-
-el.innerText = artifacts[Math.floor(Math.random()*artifacts.length)];
-
-el.style.left = Math.random()*100 + "vw";
-
-el.style.animationDuration = 20 + Math.random()*20 + "s";
-
-el.style.fontSize = 30 + Math.random()*40 + "px";
-
-bgContainer.appendChild(el);
-
-}
 
 
 /* RESIZE HANDLING */
