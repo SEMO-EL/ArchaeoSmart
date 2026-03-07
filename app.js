@@ -5,24 +5,32 @@ let currentID = null;
 let audioRecorder;
 let audioChunks = [];
 let audioData = null;
+
 let currentBrush = 3;
 let currentOpacity = 1;
 let currentColor = "#000000";
 
+let recognition = null;
+let mapInstance = null;
+
+/* -------------------------- SCREENS -------------------------- */
 
 function hideAll(){
-document.querySelectorAll("#homeScreen,#artifactScreen,#databaseScreen,#detailScreen,#mapScreen,#scannerScreen")
-.forEach(e=>e.classList.add("hidden"));
+
+document.querySelectorAll(
+"#homeScreen,#artifactScreen,#databaseScreen,#detailScreen,#mapScreen,#scannerScreen"
+).forEach(e=>e.classList.add("hidden"));
+
 }
-
-
 
 function showHome(){
+
 hideAll();
 document.getElementById("homeScreen").classList.remove("hidden");
+
 }
 
-
+/* -------------------------- NEW ARTIFACT -------------------------- */
 
 function showArtifact(){
 
@@ -35,11 +43,12 @@ currentID = Date.now();
 document.getElementById("date").innerText = new Date().toLocaleString();
 
 document.getElementById("qrcode").innerHTML="";
+
 new QRCode(document.getElementById("qrcode"), currentID.toString());
 
 }
 
-
+/* -------------------------- SAVE -------------------------- */
 
 function saveArtifact(){
 
@@ -52,12 +61,16 @@ let lat=null;
 let lng=null;
 
 if(gps.includes(",")){
+
 let p=gps.split(",");
+
 lat=parseFloat(p[0]);
 lng=parseFloat(p[1]);
+
 }
 
 let artifact={
+
 id:currentID,
 site:document.getElementById("site").value,
 type:document.getElementById("type").value,
@@ -71,6 +84,7 @@ lng:lng,
 date:document.getElementById("date").innerText,
 photo:photo,
 drawing:drawing
+
 };
 
 artifacts.push(artifact);
@@ -81,7 +95,7 @@ alert("Artifact saved");
 
 }
 
-
+/* -------------------------- DATABASE -------------------------- */
 
 function showDatabase(){
 
@@ -92,8 +106,6 @@ document.getElementById("databaseScreen").classList.remove("hidden");
 renderDatabase(artifacts);
 
 }
-
-
 
 function renderDatabase(list){
 
@@ -121,7 +133,7 @@ container.appendChild(div);
 
 }
 
-
+/* -------------------------- DETAILS -------------------------- */
 
 function showDetail(id){
 
@@ -142,10 +154,13 @@ document.getElementById("artifactDetail").innerHTML=`
 <b>GPS:</b> ${a.gps}<br>
 <b>Date:</b> ${a.date}<br>
 
+<h3>QR Code</h3>
+<div id="detailQR"></div>
+
 <h3>Notes</h3>
 ${a.notes}
 
-<h3>Voice Text (Beta)</h3>
+<h3>Voice Text</h3>
 ${a.voice}
 
 <h3>Voice Memo</h3>
@@ -161,9 +176,11 @@ ${a.drawing ? `<img src="${a.drawing}">` : "No drawing"}
 
 `;
 
+new QRCode(document.getElementById("detailQR"), id.toString());
+
 }
 
-
+/* -------------------------- SEARCH -------------------------- */
 
 function searchArtifact(){
 
@@ -175,7 +192,7 @@ renderDatabase(results);
 
 }
 
-
+/* -------------------------- EXPORT -------------------------- */
 
 function exportCSV(){
 
@@ -197,9 +214,7 @@ link.click();
 
 }
 
-
-
-/* GPS */
+/* -------------------------- GPS -------------------------- */
 
 function getLocation(){
 
@@ -243,9 +258,7 @@ maximumAge:0
 
 }
 
-
-
-/* VOICE TO TEXT (BETA) */
+/* -------------------------- VOICE TEXT -------------------------- */
 
 function startDictation(){
 
@@ -254,18 +267,21 @@ window.SpeechRecognition || window.webkitSpeechRecognition;
 
 if(!SpeechRecognition){
 
-alert("Speech recognition not supported on this device");
+alert("Speech recognition not supported");
 return;
 
 }
 
-const recognition=new SpeechRecognition();
+recognition=new SpeechRecognition();
 
 recognition.lang="en-US";
 
+recognition.continuous=true;
+
 recognition.onresult=function(e){
 
-document.getElementById("voiceText").value=e.results[0][0].transcript;
+document.getElementById("voiceText").value=
+e.results[e.results.length-1][0].transcript;
 
 };
 
@@ -273,9 +289,18 @@ recognition.start();
 
 }
 
+function stopDictation(){
 
+if(recognition){
 
-/* VOICE MEMO RECORDING */
+recognition.stop();
+recognition=null;
+
+}
+
+}
+
+/* -------------------------- AUDIO RECORD -------------------------- */
 
 async function startRecording(){
 
@@ -287,9 +312,7 @@ audioRecorder=new MediaRecorder(stream);
 
 audioChunks=[];
 
-audioRecorder.ondataavailable=e=>{
-audioChunks.push(e.data);
-};
+audioRecorder.ondataavailable=e=>audioChunks.push(e.data);
 
 audioRecorder.onstop=()=>{
 
@@ -325,28 +348,7 @@ if(audioRecorder) audioRecorder.stop();
 
 }
 
-
-
-/* CANVAS RESOLUTION */
-
-function resizeCanvas(canvas){
-
-const rect = canvas.getBoundingClientRect();
-
-const dpr = window.devicePixelRatio || 1;
-
-canvas.width = rect.width * dpr;
-canvas.height = rect.height * dpr;
-
-const ctx = canvas.getContext("2d");
-
-ctx.scale(dpr, dpr);
-
-}
-
-
-
-/* PHOTO */
+/* -------------------------- PHOTO -------------------------- */
 
 document.getElementById("photo").onchange=function(e){
 
@@ -360,13 +362,26 @@ reader.readAsDataURL(e.target.files[0]);
 
 };
 
+/* -------------------------- CANVAS -------------------------- */
 
+function resizeCanvas(canvas){
 
-/* DRAWING ENGINE */
+const rect=canvas.getBoundingClientRect();
+
+const dpr=window.devicePixelRatio || 1;
+
+canvas.width=rect.width*dpr;
+canvas.height=rect.height*dpr;
+
+const ctx=canvas.getContext("2d");
+
+ctx.scale(dpr,dpr);
+
+}
 
 function enableDrawing(canvas){
 
-const ctx = canvas.getContext("2d");
+const ctx=canvas.getContext("2d");
 
 resizeCanvas(canvas);
 
@@ -424,7 +439,6 @@ ctx.stroke();
 function stop(){
 
 drawing=false;
-
 ctx.beginPath();
 
 }
@@ -439,108 +453,60 @@ canvas.addEventListener("touchend",stop);
 
 }
 
-
-
-/* ENABLE DRAWING */
-
 enableDrawing(document.getElementById("canvas"));
 enableDrawing(document.getElementById("canvasFull"));
 
-
-
 function clearCanvas(){
+
 let c=document.getElementById("canvas");
+
 c.getContext("2d").clearRect(0,0,c.width,c.height);
+
 }
-
-
 
 function clearCanvasFull(){
+
 let c=document.getElementById("canvasFull");
+
 c.getContext("2d").clearRect(0,0,c.width,c.height);
+
 }
 
-
-
-/* FULLSCREEN DRAWING */
+/* -------------------------- FULLSCREEN DRAW -------------------------- */
 
 function openCanvasFullscreen(){
 
-const fs = document.getElementById("canvasFullscreen");
+const fs=document.getElementById("canvasFullscreen");
 
 fs.classList.remove("hidden");
-fs.style.display="flex";
 
-const fullCanvas = document.getElementById("canvasFull");
-const smallCanvas = document.getElementById("canvas");
+const fullCanvas=document.getElementById("canvasFull");
+const smallCanvas=document.getElementById("canvas");
 
 resizeCanvas(fullCanvas);
 
-/* copy previous drawing */
+const ctx=fullCanvas.getContext("2d");
 
-const fullCtx = fullCanvas.getContext("2d");
-
-fullCtx.clearRect(0,0,fullCanvas.width,fullCanvas.height);
-
-if(smallCanvas.width > 0 && smallCanvas.height > 0){
-
-fullCtx.drawImage(
-smallCanvas,
-0,
-0,
-smallCanvas.width,
-smallCanvas.height,
-0,
-0,
-fullCanvas.width,
-fullCanvas.height
-);
+ctx.drawImage(smallCanvas,0,0);
 
 }
-
-}
-
-
 
 function closeCanvasFullscreen(){
 
-const fs = document.getElementById("canvasFullscreen");
-
-const fullCanvas = document.getElementById("canvasFull");
-const smallCanvas = document.getElementById("canvas");
-
-const smallCtx = smallCanvas.getContext("2d");
-
-/* ensure small canvas has real resolution */
+const fullCanvas=document.getElementById("canvasFull");
+const smallCanvas=document.getElementById("canvas");
 
 resizeCanvas(smallCanvas);
 
-/* copy drawing */
+const ctx=smallCanvas.getContext("2d");
 
-smallCtx.clearRect(0,0,smallCanvas.width,smallCanvas.height);
+ctx.drawImage(fullCanvas,0,0,smallCanvas.width,smallCanvas.height);
 
-smallCtx.drawImage(
-fullCanvas,
-0,
-0,
-fullCanvas.width,
-fullCanvas.height,
-0,
-0,
-smallCanvas.width,
-smallCanvas.height
-);
-
-/* hide fullscreen */
-
-fs.classList.add("hidden");
-fs.style.display="none";
+document.getElementById("canvasFullscreen").classList.add("hidden");
 
 }
 
-
-
-/* QR SCANNER */
+/* -------------------------- QR SCANNER -------------------------- */
 
 function startScanner(){
 
@@ -569,9 +535,7 @@ html5QrCode.stop();
 
 }
 
-
-
-/* MAP */
+/* -------------------------- MAP -------------------------- */
 
 function showMap(){
 
@@ -579,9 +543,16 @@ hideAll();
 
 document.getElementById("mapScreen").classList.remove("hidden");
 
-let map=L.map('map').setView([31.63,-8],6);
+if(mapInstance){
+mapInstance.remove();
+}
 
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19}).addTo(map);
+mapInstance=L.map('map').setView([31.63,-8],6);
+
+L.tileLayer(
+'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+{maxZoom:19}
+).addTo(mapInstance);
 
 artifacts.forEach((a,i)=>{
 
@@ -590,7 +561,7 @@ if(!a.lat || !a.lng) return;
 let lat=a.lat+(i*0.00005);
 let lng=a.lng+(i*0.00005);
 
-let marker=L.marker([lat,lng]).addTo(map);
+let marker=L.marker([lat,lng]).addTo(mapInstance);
 
 marker.bindPopup(`
 <b>${a.type}</b><br>
@@ -603,14 +574,39 @@ Depth: ${a.depth} cm<br>
 
 }
 
-
-
-/* RESIZE HANDLING */
+/* -------------------------- RESIZE -------------------------- */
 
 window.addEventListener("resize",()=>{
 
-const canvas = document.getElementById("canvasFull");
+const canvas=document.getElementById("canvasFull");
 
 if(canvas) resizeCanvas(canvas);
 
 });
+/* FLOATING ARCHAEOLOGY BACKGROUND */
+
+const bgLayer = document.getElementById("bgLayer");
+
+if(bgLayer){
+
+const bones = ["🦴","💀","🦷"];
+
+for(let i=0;i<20;i++){
+
+let el = document.createElement("div");
+
+el.className="bgBone";
+
+el.innerText = bones[Math.floor(Math.random()*bones.length)];
+
+el.style.left = Math.random()*100 + "vw";
+
+el.style.animationDuration = 20 + Math.random()*30 + "s";
+
+el.style.fontSize = 30 + Math.random()*50 + "px";
+
+bgLayer.appendChild(el);
+
+}
+
+}
