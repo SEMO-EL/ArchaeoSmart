@@ -1,5 +1,4 @@
-const CACHE_NAME = "archaeosmart-v2";
-
+const CACHE_NAME = "archaeosmart-v3";
 const urlsToCache = [
   "./",
   "./index.html",
