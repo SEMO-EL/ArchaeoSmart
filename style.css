@@ -14,10 +14,6 @@ max-width:520px;
 width:100%;
 padding:20px;
 }
-.app{
-position:relative;
-z-index:2;
-}
 
 /* header */
 
@@ -314,41 +310,4 @@ animation:fade .25s ease;
 @keyframes fade{
 from{opacity:0; transform:translateY(8px)}
 to{opacity:1; transform:translateY(0)}
-}
-
-/* floating archaeology background */
-
-#bgArtifacts{
-position:fixed;
-top:0;
-left:0;
-width:100vw;
-height:100vh;
-pointer-events:none;
-overflow:hidden;
-z-index:0;
-}
-
-.bgBone{
-
-position:absolute;
-
-font-size:40px;
-
-opacity:0.07;
-
-animation:floatBone linear infinite;
-
-}
-
-@keyframes floatBone{
-
-0%{
-transform:translateY(100vh) rotate(0deg);
-}
-
-100%{
-transform:translateY(-20vh) rotate(360deg);
-}
-
 }
