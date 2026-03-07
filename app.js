@@ -504,12 +504,43 @@ fullCanvas.height
 
 function closeCanvasFullscreen(){
 
-const fs = document.getElementById("canvasFullscreen");
-
 const fullCanvas = document.getElementById("canvasFull");
 const smallCanvas = document.getElementById("canvas");
 
+/* resize small canvas to its visible size */
+
+const rect = smallCanvas.getBoundingClientRect();
+
+const dpr = window.devicePixelRatio || 1;
+
+smallCanvas.width = rect.width * dpr;
+smallCanvas.height = rect.height * dpr;
+
 const smallCtx = smallCanvas.getContext("2d");
+
+smallCtx.scale(dpr, dpr);
+
+/* copy drawing */
+
+smallCtx.clearRect(0,0,smallCanvas.width,smallCanvas.height);
+
+smallCtx.drawImage(
+fullCanvas,
+0,
+0,
+fullCanvas.width,
+fullCanvas.height,
+0,
+0,
+rect.width,
+rect.height
+);
+
+/* close fullscreen */
+
+document.getElementById("canvasFullscreen").classList.add("hidden");
+
+}
 
 /* ensure small canvas has real resolution */
 
