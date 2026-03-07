@@ -27,34 +27,39 @@
 
 <h1>ArchaeoSmart</h1>
 
-<div id="appVersion">v1.1.1</div>
+<div id="appVersion">v2.0.0</div>
 
 </header>
 
 
 <!-- HOME -->
 
-<div id="homeScreen">
+<div id="homeScreen" class="screen">
 
 <button class="mainButton" onclick="showArtifact()">New Artifact</button>
 
 <button class="mainButton" onclick="showDatabase()">Artifact Database</button>
 
-<button class="mainButton" onclick="startScanner()">Scan QR Code</button>
+<button class="mainButton" onclick="startScanner()">Scan QR</button>
 
 <button class="mainButton" onclick="showMap()">Artifact Map</button>
 
 </div>
 
 
+
 <!-- CREATE ARTIFACT -->
 
-<div id="artifactScreen" class="hidden">
+<div id="artifactScreen" class="screen hidden">
 
 <h2>Artifact Record</h2>
 
+<div class="card">
+
+<label>Site</label>
 <input id="site" placeholder="Site name">
 
+<label>Artifact Type</label>
 <select id="type">
 <option>Ceramic</option>
 <option>Bone</option>
@@ -62,60 +67,87 @@
 <option>Stone</option>
 </select>
 
+<label>Depth (cm)</label>
+<input id="depth" placeholder="Depth">
 
-<div class="grid">
+</div>
+
+
 
 <div class="card">
+
 <h3>QR Code</h3>
 <div id="qrcode"></div>
+
 </div>
 
+
+
 <div class="card">
-<h3>GPS</h3>
+
+<h3>Location</h3>
+
 <p id="gps">Not recorded</p>
-<button onclick="getLocation()">Get GPS</button>
+
+<button class="secondaryBtn" onclick="getLocation()">Get GPS</button>
+
 </div>
 
+
+
 <div class="card">
+
 <h3>Date</h3>
 <p id="date"></p>
-</div>
 
 </div>
 
 
-<div class="grid">
 
 <div class="card">
+
 <h3>Voice to Text (Beta)</h3>
-<button onclick="startDictation()">🎤 Record</button>
+
+<div class="voiceControls">
+
+<button onclick="startDictation()">Start</button>
+<button onclick="stopDictation()">Stop</button>
+
+</div>
+
 <textarea id="voiceText"></textarea>
+
 </div>
 
+
+
 <div class="card">
+
 <h3>Voice Memo</h3>
-<button onclick="startRecording()">Start Recording</button>
+
+<div class="voiceControls">
+
+<button onclick="startRecording()">Record</button>
 <button onclick="stopRecording()">Stop</button>
+
+</div>
+
 <audio id="audioPlayback" controls></audio>
-</div>
 
 </div>
 
 
-<div class="grid">
 
 <div class="card">
+
 <h3>Photo</h3>
+
 <input type="file" accept="image/*" id="photo">
+
 <img id="preview">
-</div>
-
-<div class="card">
-<h3>Depth</h3>
-<input id="depth" placeholder="Depth cm">
-</div>
 
 </div>
+
 
 
 <div class="card">
@@ -124,7 +156,9 @@
 
 <canvas id="canvas"></canvas>
 
-<label>Brush Size</label>
+<div class="drawingControls">
+
+<label>Brush</label>
 <input type="range" min="1" max="20" value="3"
 oninput="currentBrush=this.value">
 
@@ -136,17 +170,24 @@ oninput="currentOpacity=this.value">
 <input type="color"
 oninput="currentColor=this.value">
 
-<button onclick="clearCanvas()">Clear</button>
+</div>
 
-<button onclick="openCanvasFullscreen()">Fullscreen</button>
+<button class="secondaryBtn" onclick="clearCanvas()">Clear</button>
+
+<button class="secondaryBtn" onclick="openCanvasFullscreen()">Fullscreen</button>
 
 </div>
+
 
 
 <div class="card">
+
 <h3>Notes</h3>
+
 <textarea id="notes"></textarea>
+
 </div>
+
 
 <button class="save" onclick="saveArtifact()">Save Artifact</button>
 
@@ -156,15 +197,15 @@ oninput="currentColor=this.value">
 
 <!-- DATABASE -->
 
-<div id="databaseScreen" class="hidden">
+<div id="databaseScreen" class="screen hidden">
 
 <h2>Artifact Database</h2>
 
 <input id="searchID" placeholder="Search by Artifact ID">
 
-<button onclick="searchArtifact()">Search</button>
+<button class="secondaryBtn" onclick="searchArtifact()">Search</button>
 
-<button onclick="exportCSV()">Export CSV</button>
+<button class="secondaryBtn" onclick="exportCSV()">Export CSV</button>
 
 <div id="artifactList"></div>
 
@@ -174,7 +215,7 @@ oninput="currentColor=this.value">
 
 <!-- DETAIL -->
 
-<div id="detailScreen" class="hidden">
+<div id="detailScreen" class="screen hidden">
 
 <h2>Artifact Details</h2>
 
@@ -186,7 +227,7 @@ oninput="currentColor=this.value">
 
 <!-- MAP -->
 
-<div id="mapScreen" class="hidden">
+<div id="mapScreen" class="screen hidden">
 
 <h2>Artifact Map</h2>
 
@@ -198,7 +239,7 @@ oninput="currentColor=this.value">
 
 <!-- QR SCANNER -->
 
-<div id="scannerScreen" class="hidden">
+<div id="scannerScreen" class="screen hidden">
 
 <h2>Scan Artifact</h2>
 
@@ -208,7 +249,7 @@ oninput="currentColor=this.value">
 
 
 
-<!-- FULLSCREEN DRAWING -->
+<!-- FULLSCREEN CANVAS -->
 
 <div id="canvasFullscreen" class="hidden">
 
@@ -216,19 +257,7 @@ oninput="currentColor=this.value">
 
 <canvas id="canvasFull"></canvas>
 
-<div class="canvasTools">
-
-<label>Brush</label>
-<input type="range" min="1" max="25" value="3"
-oninput="currentBrush=this.value">
-
-<label>Opacity</label>
-<input type="range" min="0.1" max="1" step="0.1" value="1"
-oninput="currentOpacity=this.value">
-
-<button onclick="clearCanvasFull()">Clear</button>
-
-</div>
+<button class="clearCanvasBtn" onclick="clearCanvasFull()">Clear</button>
 
 </div>
 
